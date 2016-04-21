@@ -37,35 +37,34 @@ class TweetLogFetch extends Command
      */
     public function handle()
     {
-      $laravelVersion = '5.2';
-      $githubUrl = 'https://raw.githubusercontent.com/laravel/framework/'.$laravelVersion.'/CHANGELOG.md';
-      $contents = explode(PHP_EOL, file_get_contents($githubUrl));
-      array_shift($contents);
-      $contents = array_filter($contents);
+        $laravelVersion = '5.2';
+        $githubUrl = 'https://raw.githubusercontent.com/laravel/framework/'.$laravelVersion.'/CHANGELOG.md';
+        $contents = explode(PHP_EOL, file_get_contents($githubUrl));
+        array_shift($contents);
+        $contents = array_filter($contents);
 
-      $version = [];
-      $opt = false;
+        $version = [];
+        $opt = false;
 
-      foreach ($contents as $content) {
-          if (substr($content, 0, 3) == '## ') {
-              $version = array_map('trim', explode(' ', str_replace(['## v', '(', ')'], '', $content)));
-          } else if (substr($content, 0, 4) == '### ') {
-              $opt = str_replace('### ', '', trim($content));
-          } else if (!empty($version) && !empty($opt)) {
-              $line = str_replace('- ', '', $content);
-              $link = preg_match('/\(\[([^]]*)\] *\(([^)]*)\)\)/i', $line, $replace);
-              if ($link) {
-                  $line = str_replace($replace[0], $replace[2], $line);
-              }
+        foreach ($contents as $content) {
+            if (substr($content, 0, 3) == '## ') {
+                $version = array_map('trim', explode(' ', str_replace(['## v', '(', ')'], '', $content)));
+            } elseif (substr($content, 0, 4) == '### ') {
+                $opt = str_replace('### ', '', trim($content));
+            } elseif (!empty($version) && !empty($opt)) {
+                $line = str_replace('- ', '', $content);
+                $link = preg_match('/\(\[([^]]*)\] *\(([^)]*)\)\)/i', $line, $replace);
+                if ($link) {
+                    $line = str_replace($replace[0], $replace[2], $line);
+                }
 
-              \App\Log::firstOrCreate([
-                'type' => $opt,
+                \App\Log::firstOrCreate([
+                'type'    => $opt,
                 'content' => $line,
                 'version' => $version[0],
-                'date' => $version[1],
+                'date'    => $version[1],
               ]);
-          }
-      }
-
+            }
+        }
     }
 }
