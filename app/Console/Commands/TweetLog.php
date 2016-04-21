@@ -53,7 +53,7 @@ class TweetLog extends Command
             }
 
             try {
-                \Twitter::postTweet(['status' => substr($post, 0, 130), 'format' => 'json']);
+                \Twitter::postTweet(['status' => substr($post, 0, 140), 'format' => 'json']);
             } catch (\Exception $exc) {
             }
         }

@@ -55,7 +55,8 @@ class TweetLogFetch extends Command
                 $line = str_replace('- ', '', $content);
                 $link = preg_match('/\(\[([^]]*)\] *\(([^)]*)\)\)/i', $line, $replace);
                 if ($link) {
-                    $line = str_replace($replace[0], $replace[2], $line);
+                    $with = strlen($line) > 120 ? '' : $replace[2];
+                    $line = str_replace($replace[0], $with, $line);
                 }
 
                 \App\Log::firstOrCreate([
