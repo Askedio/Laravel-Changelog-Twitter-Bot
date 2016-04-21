@@ -5,6 +5,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+        <meta name="viewport" content="width=device-width">
 
         <style>
             html, body {
@@ -71,7 +72,8 @@
             }
             .details ul > li{
 
-              border-bottom: 1px solid #999
+              border-bottom: 1px solid #999;
+              clear:both;
             }
 
             .details ul > li  a {
@@ -104,6 +106,8 @@
                 left: 5%;
               }
             }
+
+            .fa-external-link{font-size: 10px;float:right;line-height:20px}
         </style>
     </head>
     <body>
@@ -127,7 +131,7 @@
                         </div>
                         <ul>
                           @foreach ($result as $row)
-                            <li><p>{!! preg_replace('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', '$1 <a href="$2" target="_github">$3</a>', $row->content) !!}</p></li>
+                            <li><p>{!! preg_replace('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', '$1 <a href="$2" target="_github"><em class="fa fa-external-link"></em></a>', $row->content) !!}</p></li>
                           @endforeach
                         </ul>
                     @endforeach
