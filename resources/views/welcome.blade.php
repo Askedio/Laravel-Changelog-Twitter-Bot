@@ -119,24 +119,19 @@
                   <a href="?json=true" target="_social"><em class="fa fa-code"></em></a>
                 </div>
 
-
                 <div class="log">
                   <div class="details">
-
-  @foreach ($changes as $type => $result)
-      <div class="header">
-        <h3>{{ $type }}</h3> {{ count($result) }}
-      </div>
-      <ul>
-        @foreach ($result as $row)
-          <li><p>{!! preg_replace('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', '$1 <a href="$2" target="_github">$3</a>', $row->content) !!}</p></li>
-        @endforeach
-      </ul>
-  @endforeach
-
-
+                    @foreach ($changes as $type => $result)
+                        <div class="header">
+                          <h3>{{ $type }}</h3> {{ count($result) }}
+                        </div>
+                        <ul>
+                          @foreach ($result as $row)
+                            <li><p>{!! preg_replace('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', '$1 <a href="$2" target="_github">$3</a>', $row->content) !!}</p></li>
+                          @endforeach
+                        </ul>
+                    @endforeach
                   </div>
-
                 </div>
             </div>
         </div>
