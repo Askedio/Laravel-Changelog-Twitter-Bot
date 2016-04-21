@@ -17,22 +17,21 @@ Route::get('/', function () {
     $rows = App\Log::where('version', '=', $version[0]->version)->get();
 
     $results = [
-      'Added' => [],
+      'Added'   => [],
       'Changed' => [],
-      'Fixed' => [],
+      'Fixed'   => [],
       'Removed' => [],
     ];
 
     foreach ($rows as $row) {
-      $results[$row->type][] = $row;
+        $results[$row->type][] = $row;
     }
 
     $return = [
-      'version' => $version[0]->version,
-      'date' => $version[0]->date,
-      'changes'    => $results
+      'version'    => $version[0]->version,
+      'date'       => $version[0]->date,
+      'changes'    => $results,
     ];
-
 
     return request()->has('json') ? $return : view('welcome')->with($return);
 });
