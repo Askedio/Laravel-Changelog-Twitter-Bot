@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class Loger extends Migration
 {
     /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+      * Run the migrations.
+      *
+      * @return void
+      */
      public function up()
      {
          Schema::create('log', function (Blueprint $table) {

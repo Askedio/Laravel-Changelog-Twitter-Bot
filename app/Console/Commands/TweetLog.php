@@ -37,26 +37,25 @@ class TweetLog extends Command
      */
     public function handle()
     {
+        $log = \App\Log::where('tweeted', '=', '0')->limit(5)->orderBy('id', 'DESC')->get();
+        foreach ($log as $lg) {
+            $lg->tweeted = 1;
+            $lg->save();
 
-      $log = \App\Log::where('tweeted', '=', '0')->limit(5)->orderBy('id', 'DESC')->get();
-      foreach ($log as $lg) {
-          $lg->tweeted = 1;
-          $lg->save();
+            $post = $lg->version.' '.$lg->content;
 
-          $post = $lg->version.' '. $lg->content;
+            if (strlen($lg->content) < 130) {
+                $post = '#laravel '.$post;
+            }
 
-          if (strlen($lg->content) < 130) {
-              $post = '#laravel ' . $post;
-          }
+            if (strlen($lg->content) < 120) {
+                $post .= ' #changelog';
+            }
 
-          if (strlen($lg->content) < 120) {
-              $post .= ' #changelog';
-          }
-
-          try {
-              \Twitter::postTweet(['status' => substr($post,0, 130), 'format' => 'json']);
-          } catch(\Exception $exc) {
-          }
-      }
+            try {
+                \Twitter::postTweet(['status' => substr($post, 0, 130), 'format' => 'json']);
+            } catch (\Exception $exc) {
+            }
+        }
     }
 }
