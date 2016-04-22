@@ -29,7 +29,7 @@ class HomeController extends Controller
         $rows = $this->log->where('version', '=', $version->version);
 
         if (request()->has('q')) {
-            $rows->where('content', 'LIKE', '%'. request()->input('q') .'%');
+            $rows->where('content', 'LIKE', '%'.request()->input('q').'%');
         }
 
         $results = [
@@ -51,29 +51,29 @@ class HomeController extends Controller
         ];
     }
 
-    function versions(){
+    public function versions()
+    {
         return $this->log->distinct('version')->select('version')->limit(6)->get();
     }
 
-    function index()
+    public function index()
     {
         return view('welcome')->with(array_merge($this->getRecords(), ['versions' => $this->versions()]));
     }
 
-    function show($version)
+    public function show($version)
     {
-      return view('welcome')->with(array_merge($this->getRecords($version), ['versions' => $this->versions()]));
+        return view('welcome')->with(array_merge($this->getRecords($version), ['versions' => $this->versions()]));
     }
 
-  function getJson($version)
+    public function getJson($version)
     {
         return $this->getRecords($version);
     }
 
-    function getRss($version)
+    public function getRss($version)
     {
-
-        $feed = \App::make("feed");
+        $feed = \App::make('feed');
 
         $posts = $this->getRecords($version);
 
@@ -84,18 +84,17 @@ class HomeController extends Controller
         $feed->setTextLimit(100);
 
         foreach ($posts['changes'] as $post) {
-         foreach ($post as $row) {
+            foreach ($post as $row) {
                 $line = $row->content;
                 $link = preg_match('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', $line, $replace);
                 if ($link) {
-                   $line = str_replace($replace[0], '', $line);
-                   $link = $replace[2];
+                    $line = str_replace($replace[0], '', $line);
+                    $link = $replace[2];
                 }
-                $feed->add('Laravel ' . $row->version, '', $link, $row->updated_at, $row->type, $line);
-         }
+                $feed->add('Laravel '.$row->version, '', $link, $row->updated_at, $row->type, $line);
+            }
         }
 
         return $feed->render('atom');
-  }
-
+    }
 }

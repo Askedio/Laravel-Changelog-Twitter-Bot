@@ -24,6 +24,4 @@ class Log extends Model
      */
     protected $hidden = [
     ];
-
-
 }
