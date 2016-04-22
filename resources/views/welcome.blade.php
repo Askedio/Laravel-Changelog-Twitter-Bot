@@ -3,6 +3,8 @@
     <head>
         <title>Laravel {{ $version }} Changelog from {{ $date }}</title>
 
+        <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" media="none" onload="if(media!='all')media='all'">
         <meta name="viewport" content="width=device-width">
 
         <style>
@@ -149,9 +151,6 @@
         </style>
     </head>
     <body>
-        <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-
         <div class="container">
             <div class="content">
                 <p class="pretitle">Laravel</p>
