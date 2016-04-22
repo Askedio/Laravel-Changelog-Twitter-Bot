@@ -39,20 +39,23 @@
             }
 
             h1 {
-                font-size: 96px;
-                margin-top: 20%;
+                font-size: 86px;
                 margin-bottom:0;
-                font-weight: normal
+                font-weight: normal;
+                margin:0;
             }
+
+            .pretitle{margin: 10% 0 0 0;font-size: 24px}
+
             .log{
               background: rgba(255,255,255,.95);
               border-radius: 6px;
               color: #000;
               position: absolute;
-              bottom: -6px;
-              width: 50%;
-              left: 25%;
-              height: 60%;
+              top: 290px;
+              width: 60%;
+              left: 20%;
+              height: calc(100% - 282px);
             }
             .log .details {
               overflow: auto;
@@ -61,7 +64,7 @@
               text-align:left;
 
             }
-            .small{font-size:11px}
+            .small{font-size:10px}
 
             .details .header { margin: 20px}
             .details ul{
@@ -79,7 +82,8 @@
             .details ul > li  a {
               color: #000;
             }
-            h3{display:inline}
+            h3{font-size:26px;display:inline}
+
 
             ::-webkit-scrollbar {
                 width: 12px;
@@ -94,47 +98,101 @@
             }
             .social {
               padding: 10px;
-              font-size: 28px
+              font-size: 24px;
+              background-color: rgba(255,255,255,.1);
+              border-radius: 6px;
             }
-            .social a:nth-child(2){
-              padding: 0 20px 0 20px;
+            .social a:not(:first-child):not(:last-child){
+              padding: 0 14px 0 14px;
             }
+
+            .details .fa-external-link{font-size: 10px;line-height:20px}
+            .versions{font-size:10px;margin-top:-12px;margin-bottom:10px;}
+            .versions a{padding: 0 3px 0 3px;text-decoration: none}
+
 
             @media only screen and (max-width : 480px) {
               .log{
                 width: 90%;
                 left: 5%;
               }
+              h1 {
+                font-size: 46px;
+              }
+              .versions{
+                margin-top:0px;
+              }
+
+            }
+            .title span{
+              font-size: 24px;
+              float:right;
+              clear:both;
+              display:block;
+              margin-top: 24px;
+              width:18px;
+              display:none;
             }
 
-            .fa-external-link{font-size: 10px;float:right;line-height:20px}
+            .title span em{
+              float:right;
+              clear:both;
+            }
+
+            input{
+              width: calc(100% - 20px);
+              border:0;
+              font-size: 16px;
+              margin: 10px 10px 0 10px;
+              padding: 6px;
+              background-color: transparent;
+            }
+
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <h1 class="title">{{ $version }}</h1>
-                <div class="date">{{ $date }}</div>
-                <h2 class="small">Twitter Changelog Bot By <a href="https://twitter.com/asked_io">William Bowman</a></h2>
+                <p class="pretitle">Laravel</p>
+                <h1 class="title">v{{ $version }}</h1>
+                <div class="versions">
+                  @foreach ($versions as $vers)
+                    @if($version != $vers->version)<a href="{{ url($vers->version) }}">{{ $vers->version }}</a>@endif
+                  @endforeach
+                </div>
+                <div class="date">Released: {{ $date }}</div>
+                <h2 class="small">&nbsp;</h2>
 
                 <div class="social">
+                  <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
                   <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
                   <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-github"></em></a>
-                  <a href="?json=true" target="_social"><em class="fa fa-code"></em></a>
+                  <a href="/latest.rss" target="_social"><em class="fa fa-rss"></em></a>
+                  <a href="/latest.json" target="_social"><em class="fa fa-code"></em></a>
                 </div>
+
 
                 <div class="log">
                   <div class="details">
-                    @foreach ($changes as $type => $result)
+
+                    <form method="get">
+                      <input type="search" name="q" placeholder="Search" value="{{ $q }}">
+                    </form>
+
+                    @forelse ($changes as $type => $result)
                         <div class="header">
-                          <h3>{{ $type }}</h3> {{ count($result) }}
+                          <h3>{{ $type }}</h3> <span>{{ count($result) }}</span>
                         </div>
                         <ul>
                           @foreach ($result as $row)
                             <li><p>{!! preg_replace('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', '$1 <a href="$2" target="_github"><em class="fa fa-external-link"></em></a>', $row->content) !!}</p></li>
                           @endforeach
                         </ul>
-                    @endforeach
+                    @empty
+                      <div class="header">
+                        <h3>No Results.</span>
+                      </div>
+                    @endforelse
                   </div>
                 </div>
             </div>
