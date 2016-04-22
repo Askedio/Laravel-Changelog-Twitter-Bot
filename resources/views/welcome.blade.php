@@ -167,8 +167,8 @@
                   <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
                   <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
                   <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-github"></em></a>
-                  <a href="/latest.rss" target="_social"><em class="fa fa-rss"></em></a>
-                  <a href="/latest.json" target="_social"><em class="fa fa-code"></em></a>
+                  <a href="{{ url('latest.rss') }}" target="_social"><em class="fa fa-rss"></em></a>
+                  <a href="{{ url('latest.json') }}" target="_social"><em class="fa fa-code"></em></a>
                 </div>
 
 
