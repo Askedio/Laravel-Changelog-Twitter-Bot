@@ -14,5 +14,3 @@ Route::get('/{id}.json', 'HomeController@getJson');
 Route::get('{id}.rss', 'HomeController@getRss');
 Route::get('/{version}/', 'HomeController@show');
 Route::get('/', 'HomeController@index');
-
-
