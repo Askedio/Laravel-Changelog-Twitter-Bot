@@ -10,8 +10,8 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::get('latest.json', 'HomeController@getJson');
-Route::get('latest.rss', 'HomeController@getRss');
+Route::get('/{id}.json', 'HomeController@getJson');
+Route::get('{id}.rss', 'HomeController@getRss');
 Route::get('/{version}/', 'HomeController@show');
 Route::get('/', 'HomeController@index');
 
