@@ -43,16 +43,9 @@ class TweetReplies extends Command
                 continue;
             }
 
-            if (preg_match('/meaning of life/s', $comment->text)) {
-              $this->tweet($comment->user->screen_name, array_rand([
-                'The meaning of life can be found while writing #laravel #php code.',
-                'I think if you keep coding with #laravel #php you\'ll find the answer.',
-              ], 1));
-            }
-
             if (preg_match('/latest version/s', $comment->text)) {
                 $version = \App\Version::first();
-                $post = 'The latest version of #laravel is: '.$version->number.' released '.$version->date;
+                $post = 'The latest version of #laravel is '.$version->number;
                 $this->tweet($comment->user->screen_name, $post);
             }
 
