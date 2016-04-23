@@ -46,7 +46,7 @@ class TweetLogFetch extends Command
         $version = [];
         $opt = false;
 
-        /**
+        /*
          * Regexp makes more sense but ya, to lazy - and I'm not regexp pro.
          */
         foreach ($contents as $content) {
@@ -60,14 +60,14 @@ class TweetLogFetch extends Command
                 $links = [];
 
                 if ($link) {
-                    foreach($replace[2] as $lin){
-                      $links[] = $lin;
+                    foreach ($replace[2] as $lin) {
+                        $links[] = $lin;
                     }
-                    foreach($replace[0] as $lin){
-                      $line = str_replace($lin, '', $line);
-                      $line = preg_replace('/\s\(([^)]*)\)/s', '', $line);
+                    foreach ($replace[0] as $lin) {
+                        $line = str_replace($lin, '', $line);
+                        $line = preg_replace('/\s\(([^)]*)\)/s', '', $line);
                     }
-                };
+                }
 
                 \App\Log::firstOrCreate([
                 'type'    => $opt,

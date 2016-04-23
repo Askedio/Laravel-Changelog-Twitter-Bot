@@ -88,7 +88,7 @@ class HomeController extends Controller
 
         foreach ($posts['changes'] as $post) {
             foreach ($post as $row) {
-              $feed->add('Laravel '.$row->version, false, $row->link, $row->updated_at, $row->type, $row->content);
+                $feed->add('Laravel '.$row->version, false, $row->link, $row->updated_at, $row->type, $row->content);
             }
         }
 

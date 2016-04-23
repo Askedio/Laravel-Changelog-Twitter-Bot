@@ -12,7 +12,7 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'version', 'type', 'content', 'date', 'tweeted', 'link'
+        'version', 'type', 'content', 'date', 'tweeted', 'link',
     ];
 
     protected $table = 'log';

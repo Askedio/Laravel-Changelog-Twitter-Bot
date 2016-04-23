@@ -37,18 +37,17 @@ class TweetLog extends Command
      */
     public function handle()
     {
-
         $log = \App\Log::where('tweeted', '=', '0')->limit(1)->orderBy('id', 'DESC')->get();
         foreach ($log as $lg) {
             $lg->tweeted = 1;
             $lg->save();
 
-            $link=$lg->links();
+            $link = $lg->links();
 
             $base_post = $lg->version.' '.$lg->content;
 
             $post = !empty($link[0])
-              ? $base_post .' '. $link[0]
+              ? $base_post.' '.$link[0]
               : $base_post;
 
             if (strlen($post) < 130) {

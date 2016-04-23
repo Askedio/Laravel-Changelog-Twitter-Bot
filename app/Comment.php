@@ -12,7 +12,7 @@ class Comment extends Model
      * @var array
      */
     protected $fillable = [
-        'tweetid'
+        'tweetid',
     ];
 
     protected $table = 'comments';
@@ -24,6 +24,4 @@ class Comment extends Model
      */
     protected $hidden = [
     ];
-
-
 }
