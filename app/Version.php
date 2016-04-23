@@ -12,7 +12,7 @@ class Version extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date'
+        'number', 'date',
     ];
 
     protected $table = 'versions';
@@ -27,6 +27,6 @@ class Version extends Model
 
     public function logs()
     {
-      return $this->hasMany('App\Log');
+        return $this->hasMany('App\Log');
     }
 }

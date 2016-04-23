@@ -157,7 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Thujohn\Twitter\TwitterServiceProvider::class,
         Roumen\Feed\FeedServiceProvider::class,
-        'GrahamCampbell\GitHub\GitHubServiceProvider'
+        'GrahamCampbell\GitHub\GitHubServiceProvider',
 
     ],
 
@@ -206,8 +206,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Twitter'   => Thujohn\Twitter\Facades\Twitter::class,
         'Feed'      => Roumen\Feed\Feed::class,
-        'GitHub' => 'GrahamCampbell\GitHub\Facades\GitHub'
-
+        'GitHub'    => 'GrahamCampbell\GitHub\Facades\GitHub',
 
     ],
 

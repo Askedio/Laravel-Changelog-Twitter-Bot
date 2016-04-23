@@ -44,7 +44,7 @@ class TweetReplies extends Command
             }
 
             if (preg_match('/meaning of life/s', $comment->text)) {
-              $this->tweet($comment->user->screen_name, array_rand([
+                $this->tweet($comment->user->screen_name, array_rand([
                 'The meaning of life can be found while writing #laravel #php code.',
                 'I think if you keep coding with #laravel #php you\'ll find the answer.',
               ], 1));
@@ -60,9 +60,10 @@ class TweetReplies extends Command
         }
     }
 
-    private function tweet($user, $message){
-      if(env('APP_ENV') == 'production'){
-        \Twitter::postTweet(['status' => substr('@'.$user. ' '. $message, 0, 140), 'format' => 'json']);
-      }
+    private function tweet($user, $message)
+    {
+        if (env('APP_ENV') == 'production') {
+            \Twitter::postTweet(['status' => substr('@'.$user.' '.$message, 0, 140), 'format' => 'json']);
+        }
     }
 }

@@ -23,7 +23,7 @@ class Log extends Model
      * @var array
      */
     protected $hidden = [
-      'tweeted', 'version_id', 'updated_at', 'id'
+      'tweeted', 'version_id', 'updated_at', 'id',
     ];
 
     public function links()
@@ -33,7 +33,6 @@ class Log extends Model
 
     public function version()
     {
-      return $this->belongsTo('App\Version');
+        return $this->belongsTo('App\Version');
     }
-
 }
