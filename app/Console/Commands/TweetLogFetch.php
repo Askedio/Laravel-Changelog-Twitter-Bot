@@ -38,7 +38,7 @@ class TweetLogFetch extends Command
     public function handle()
     {
         $laravelVersion = '5.2';
-        $githubUrl = 'https://raw.githubusercontent.com/laravel/framework/'.$laravelVersion.'/CHANGELOG.md';
+        $githubUrl = 'https://cdn.rawgit.com/laravel/framework/'.$laravelVersion.'/CHANGELOG.md';
         $contents = explode(PHP_EOL, file_get_contents($githubUrl));
         array_shift($contents);
         $contents = array_filter($contents);
@@ -46,6 +46,9 @@ class TweetLogFetch extends Command
         $version = [];
         $opt = false;
 
+        /**
+         * Regexp makes more sense but ya, to lazy - and I'm not regexp pro.
+         */
         foreach ($contents as $content) {
             if (substr($content, 0, 3) == '## ') {
                 $version = array_map('trim', explode(' ', str_replace(['## v', '(', ')'], '', $content)));
@@ -53,17 +56,25 @@ class TweetLogFetch extends Command
                 $opt = str_replace('### ', '', trim($content));
             } elseif (!empty($version) && !empty($opt)) {
                 $line = str_replace('- ', '', $content);
-                $link = preg_match('/\(\[([^]]*)\] *\(([^)]*)\)\)/i', $line, $replace);
+                $link = preg_match_all('/\[([^]]*)\] *\(([^)]*)\)/s', $line, $replace);
+                $links = [];
+
                 if ($link) {
-                    $with = strlen($line) > 120 ? '' : $replace[2];
-                    $line = str_replace($replace[0], $with, $line);
-                }
+                    foreach($replace[2] as $lin){
+                      $links[] = $lin;
+                    }
+                    foreach($replace[0] as $lin){
+                      $line = str_replace($lin, '', $line);
+                      $line = preg_replace('/\s\(([^)]*)\)/s', '', $line);
+                    }
+                };
 
                 \App\Log::firstOrCreate([
                 'type'    => $opt,
-                'content' => $line,
+                'content' => $line.'.',
                 'version' => $version[0],
                 'date'    => $version[1],
+                'link'    => implode(',', $links),
               ]);
             }
         }

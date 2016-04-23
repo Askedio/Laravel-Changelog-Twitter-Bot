@@ -39,13 +39,16 @@ class HomeController extends Controller
           'Removed' => [],
         ];
 
-        foreach ($rows->get() as $row) {
+        $rows = $rows->get();
+
+        foreach ($rows as $row) {
             $results[$row->type][] = $row;
         }
 
         return [
           'version'    => $version->version,
           'date'       => $version->date,
+          'totals'     => $rows->count(),
           'changes'    => array_filter($results),
           'q'          => request()->input('q'),
         ];
@@ -85,13 +88,7 @@ class HomeController extends Controller
 
         foreach ($posts['changes'] as $post) {
             foreach ($post as $row) {
-                $line = $row->content;
-                $link = preg_match('|([\w\d]*)\s?(https?://([\d\w\.-]+\.[\w\.]{2,6})[^\s\]\[\<\>]*/?)|i', $line, $replace);
-                if ($link) {
-                    $line = str_replace($replace[0], '', $line);
-                    $link = $replace[2];
-                }
-                $feed->add('Laravel '.$row->version, '', $link, $row->updated_at, $row->type, $line);
+              $feed->add('Laravel '.$row->version, false, $row->link, $row->updated_at, $row->type, $row->content);
             }
         }
 

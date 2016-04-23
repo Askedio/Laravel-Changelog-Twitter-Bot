@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Log extends Model
+class Comment extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,10 +12,10 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'version', 'type', 'content', 'date', 'tweeted', 'link'
+        'tweetid'
     ];
 
-    protected $table = 'log';
+    protected $table = 'comments';
 
     /**
      * The attributes that should be hidden for arrays.
@@ -25,8 +25,5 @@ class Log extends Model
     protected $hidden = [
     ];
 
-    public function links()
-    {
-        return array_filter(explode(',', $this->link));
-    }
+
 }

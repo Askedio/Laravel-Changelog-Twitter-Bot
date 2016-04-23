@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\TweetLogFetch::class,
         Commands\TweetLog::class,
+        Commands\TweetReplies::class,
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('tweetlog:fetch')->hourly();
-        $schedule->command('tweetlog:tweet')->everyThirtyMinutes();
+        $schedule->command('tweetlog:tweet')->everyTenMinutes();
+        $schedule->command('tweetlog:replies')->everyTenMinutes();
     }
 }
