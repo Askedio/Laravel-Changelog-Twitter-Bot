@@ -39,16 +39,30 @@ class TweetReplies extends Command
     {
         $mentions = \Twitter::getMentionsTimeline(['count' => 20, 'format' => 'json']);
         foreach (json_decode($mentions) as $comment) {
-            if (preg_match('/latest version/s', $comment->text)) {
-                if (\App\Comment::where('tweetid', $comment->id)->first()) {
-                    continue;
-                }
-
-                $version = \App\Log::distinct('version')->select('version')->first();
-                $post = '@'.$comment->user->screen_name.' The latest version of #laravel is: '.$version->version.' released '.$version->date;
-                \Twitter::postTweet(['status' => substr($post, 0, 140), 'format' => 'json']);
-                \App\Comment::create(['tweetid' => $comment->id]);
+            if (\App\Comment::where('tweetid', $comment->id)->first()) {
+                continue;
             }
+
+            if (preg_match('/meaning of life/s', $comment->text)) {
+              $this->tweet($comment->user->screen_name, array_rand([
+                'The meaning of life can be found while writing #laravel #php code.',
+                'I think if you keep coding with #laravel #php you\'ll find the answer.',
+              ], 1));
+            }
+
+            if (preg_match('/latest version/s', $comment->text)) {
+                $version = \App\Version::first();
+                $post = 'The latest version of #laravel is: '.$version->number.' released '.$version->date;
+                $this->tweet($comment->user->screen_name, $post);
+            }
+
+            \App\Comment::create(['tweetid' => $comment->id]);
         }
+    }
+
+    private function tweet($user, $message){
+      if(env('APP_ENV') == 'production'){
+        \Twitter::postTweet(['status' => substr('@'.$user. ' '. $message, 0, 140), 'format' => 'json']);
+      }
     }
 }

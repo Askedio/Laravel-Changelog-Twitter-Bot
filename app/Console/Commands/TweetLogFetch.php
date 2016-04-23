@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use GrahamCampbell\GitHub\Facades\GitHub;
 
 class TweetLogFetch extends Command
 {
@@ -37,9 +38,21 @@ class TweetLogFetch extends Command
      */
     public function handle()
     {
-        $laravelVersion = '5.2';
-        $githubUrl = 'https://cdn.rawgit.com/laravel/framework/'.$laravelVersion.'/CHANGELOG.md';
-        $contents = explode(PHP_EOL, file_get_contents($githubUrl));
+
+
+        $releases = array_map(function($tag){
+          $version = ltrim($tag['name'], 'v');
+          if(!\App\Tag::where('number', $version)->first()){
+            \App\Tag::create(['number' => $version]);
+            if(env('APP_ENV') == 'production'){
+                \Twitter::postTweet(['status' => 'Version ' . $version . ' has been tagged for #laravel #php', 'format' => 'json']);
+            }
+          }
+        }, GitHub::repo()->tags('laravel', 'framework'));
+
+        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG.md');
+        $contents = explode(PHP_EOL, base64_decode($read['content']));
+
         array_shift($contents);
         $contents = array_filter($contents);
 
@@ -52,6 +65,13 @@ class TweetLogFetch extends Command
         foreach ($contents as $content) {
             if (substr($content, 0, 3) == '## ') {
                 $version = array_map('trim', explode(' ', str_replace(['## v', '(', ')'], '', $content)));
+                if(!$vers = \App\Version::where('number', $version[0])->first()){
+                  $vers = \App\Version::create(['number' => $version[0], 'date' => $version[1]]);
+                  if(env('APP_ENV') == 'production'){
+                      \Twitter::postTweet(['status' => '#laravel Changelog updated for version ' . $version[0] . ' ' . $version[1] . ' #changelog', 'format' => 'json']);
+                  }
+                }
+
             } elseif (substr($content, 0, 4) == '### ') {
                 $opt = str_replace('### ', '', trim($content));
             } elseif (!empty($version) && !empty($opt)) {
@@ -72,11 +92,14 @@ class TweetLogFetch extends Command
                 \App\Log::firstOrCreate([
                 'type'    => $opt,
                 'content' => $line.'.',
-                'version' => $version[0],
-                'date'    => $version[1],
+                'version_id' => $vers->id,
                 'link'    => implode(',', $links),
               ]);
             }
         }
+
+
+
+
     }
 }

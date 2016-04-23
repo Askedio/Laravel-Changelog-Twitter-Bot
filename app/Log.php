@@ -12,7 +12,7 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'version', 'type', 'content', 'date', 'tweeted', 'link',
+        'version_id', 'type', 'content', 'tweeted', 'link',
     ];
 
     protected $table = 'log';
@@ -23,10 +23,17 @@ class Log extends Model
      * @var array
      */
     protected $hidden = [
+      'tweeted', 'version_id', 'updated_at', 'id'
     ];
 
     public function links()
     {
         return array_filter(explode(',', $this->link));
     }
+
+    public function version()
+    {
+      return $this->belongsTo('App\Version');
+    }
+
 }

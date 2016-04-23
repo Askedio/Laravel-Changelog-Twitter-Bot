@@ -48,8 +48,13 @@
           }
 
           .pretitle {
-            margin: 10% 0 0;
+            margin: 5% 0 0;
             font-size: 24px;
+          }
+
+          .spam{
+            font-size: 8px;
+            margin-top: 10px;
           }
 
           .log {
@@ -232,7 +237,7 @@
                   <div class="dropdown-content">
                     <ul>
                       @foreach ($versions as $row)
-                        @if($version != $row->version)<li><a href="{{ url($row->version) }}">v{{ $row->version }}</a></li>@endif
+                        @if($version != $row->number)<li><a href="{{ url($row->number) }}">v{{ $row->number }}</a></li>@endif
                       @endforeach
                     </ul>
                   </div>
@@ -246,8 +251,12 @@
                   <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
                   <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
                   <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-github"></em></a>
-                  <a href="{{ url('latest.rss') }}" target="_social"><em class="fa fa-rss"></em></a>
-                  <a href="{{ url('latest.json') }}" target="_social"><em class="fa fa-code"></em></a>
+                  <a href="{{ url($version .'.rss') }}" target="_social"><em class="fa fa-rss"></em></a>
+                  <a href="{{ url($version .'.json') }}" target="_social"><em class="fa fa-code"></em></a>
+                </div>
+
+                <div class="spam">
+                     Created by <a href="https://asked.io" target="_blank">asked.io</a> <a href="https://twitter.com/asked_io" target="_blank"><em class="fa fa-twitter"></em></a> &amp; <a href="http://goo.gl/QsjtV7" target="_blank">hosted for $3</a>.
                 </div>
 
                 <div class="log">

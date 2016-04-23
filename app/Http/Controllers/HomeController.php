@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Log;
 use Illuminate\Http\Request;
+use GrahamCampbell\GitHub\Facades\GitHub;
 
 class HomeController extends Controller
 {
@@ -21,12 +22,11 @@ class HomeController extends Controller
         $log = $this->log->distinct('version');
 
         $version = $version != 'latest'
-            ? $log->where('version', '=', $version)
-            : $log;
+            ? \App\Version::where('number', '=', $version)->firstOrFail()
+            : \App\Version::first();
 
-        $version = $log->firstOrFail();
 
-        $rows = $this->log->where('version', '=', $version->version);
+        $rows = $version->logs();
 
         if (request()->has('q')) {
             $rows->where('content', 'LIKE', '%'.request()->input('q').'%');
@@ -46,7 +46,7 @@ class HomeController extends Controller
         }
 
         return [
-          'version'    => $version->version,
+          'version'    => $version->number,
           'date'       => $version->date,
           'totals'     => $rows->count(),
           'changes'    => array_filter($results),
@@ -56,7 +56,7 @@ class HomeController extends Controller
 
     public function versions()
     {
-        return $this->log->distinct('version')->select('version')->limit(6)->get();
+        return \App\Version::limit(20)->get();
     }
 
     public function index()
@@ -66,6 +66,15 @@ class HomeController extends Controller
 
     public function show($version)
     {
+
+        if (request()->is('*.json')) {
+          return $this->getJson(basename($version, '.json'));
+        }
+
+        if (request()->is('*.rss')) {
+          return $this->getRss(basename($version, '.rss'));
+        }
+
         return view('welcome')->with(array_merge($this->getRecords($version), ['versions' => $this->versions()]));
     }
 
@@ -88,7 +97,7 @@ class HomeController extends Controller
 
         foreach ($posts['changes'] as $post) {
             foreach ($post as $row) {
-                $feed->add('Laravel '.$row->version, false, $row->link, $row->updated_at, $row->type, $row->content);
+                $feed->add('Laravel '.$row->version->number, false, $row->link, $row->updated_at, $row->type, $row->content);
             }
         }
 

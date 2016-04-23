@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class Loger extends Migration
+class Tag extends Migration
 {
     /**
       * Run the migrations.
@@ -12,13 +12,9 @@ class Loger extends Migration
       */
      public function up()
      {
-         Schema::create('log', function (Blueprint $table) {
+         Schema::create('tags', function (Blueprint $table) {
            $table->increments('id');
-           $table->integer('tweeted')->default(0);
-           $table->integer('version_id')->index();
-           $table->string('link')->nullable();
-           $table->enum('type', ['Added', 'Changed', 'Fixed', 'Removed']);
-           $table->longtext('content');
+           $table->string('number');
            $table->timestamps();
          });
      }
@@ -30,6 +26,6 @@ class Loger extends Migration
       */
      public function down()
      {
-         Schema::drop('log');
+         Schema::drop('tags');
      }
 }
