@@ -5,6 +5,7 @@
 
         <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" media="none" onload="if(media!='all')media='all'">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" media="none" onload="if(media!='all')media='all'">
         <meta name="viewport" content="width=device-width">
 
         <style>
@@ -120,8 +121,9 @@
           .social {
             padding: 10px;
             font-size: 24px;
-            background-color: rgba(255,255,255,.1);
+            background: rgba(255,255,255,.1);
             border-radius: 6px;
+            color:#fff;
           }
 
           .social a:not(:first-child):not(:last-child) {
