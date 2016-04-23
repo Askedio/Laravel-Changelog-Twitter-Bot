@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Log;
 use Illuminate\Http\Request;
-use GrahamCampbell\GitHub\Facades\GitHub;
 
 class HomeController extends Controller
 {
@@ -24,7 +23,6 @@ class HomeController extends Controller
         $version = $version != 'latest'
             ? \App\Version::where('number', '=', $version)->firstOrFail()
             : \App\Version::first();
-
 
         $rows = $version->logs();
 
@@ -66,13 +64,12 @@ class HomeController extends Controller
 
     public function show($version)
     {
-
         if (request()->is('*.json')) {
-          return $this->getJson(basename($version, '.json'));
+            return $this->getJson(basename($version, '.json'));
         }
 
         if (request()->is('*.rss')) {
-          return $this->getRss(basename($version, '.rss'));
+            return $this->getRss(basename($version, '.rss'));
         }
 
         return view('welcome')->with(array_merge($this->getRecords($version), ['versions' => $this->versions()]));
