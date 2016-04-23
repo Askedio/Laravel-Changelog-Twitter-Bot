@@ -44,10 +44,11 @@ class TweetReplies extends Command
             }
 
             if (preg_match('/meaning of life/s', $comment->text)) {
-              $this->tweet($comment->user->screen_name, array_rand([
+              $meanings = [
                 'The meaning of life can be found while writing #laravel #php code.',
                 'I think if you keep coding with #laravel #php you\'ll find the answer.',
-              ], 1));
+              ];
+              $this->tweet($comment->user->screen_name, $meanings[array_rand($meanings, 1)]);
             }
 
             if (preg_match('/latest version/s', $comment->text)) {
