@@ -57,6 +57,11 @@ class TweetReplies extends Command
                 $this->tweet($comment->user->screen_name, $post);
             }
 
+            if (preg_match('/thank you/s', $comment->text)) {
+                $post = 'Your\'re welcome.';
+                $this->tweet($comment->user->screen_name, $post);
+            }
+
             \App\Comment::create(['tweetid' => $comment->id]);
         }
     }
