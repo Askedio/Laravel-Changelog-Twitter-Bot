@@ -51,7 +51,7 @@ class TweetReplies extends Command
               $this->tweet($comment->user->screen_name, $meanings[array_rand($meanings, 1)]);
             }
 
-            if (preg_match('/latest version/s', $comment->text)) {
+            if (preg_match('/latest version/s', $comment->text) || preg_match('/current version/s', $comment->text)) {
                 $version = \App\Version::first();
                 $post = 'The latest version of #laravel is: '.$version->number.' released '.$version->date;
                 $this->tweet($comment->user->screen_name, $post);
