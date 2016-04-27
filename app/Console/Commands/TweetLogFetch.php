@@ -78,10 +78,26 @@ class TweetLogFetch extends Command
                 $line = str_replace('- ', '', $content);
                 $link = preg_match_all('/\[([^]]*)\] *\(([^)]*)\)/s', $line, $replace);
                 $links = [];
+                $authors = [];
 
                 if ($link) {
                     foreach ($replace[2] as $lin) {
                         $links[] = $lin;
+                    }
+                    foreach ($replace[1] as $id) {
+                        if (substr($id, 0, 1) == '#') {
+                          try {
+                            $pull_request = GitHub::pull_request()->show('laravel', 'framework', ltrim($id, '#'));
+
+                            $user = $pull_request['user'];
+                            $authors[] = \App\Author::firstOrCreate([
+                              'name'    => $user['login'],
+                              'avatar' => $user['avatar_url'],
+                              'url' => $user['html_url'],
+                            ])->id;
+                          } catch (\Exception $e) {
+                          }
+                      }
                     }
                     foreach ($replace[0] as $lin) {
                         $line = str_replace($lin, '', $line);
@@ -89,12 +105,16 @@ class TweetLogFetch extends Command
                     }
                 }
 
-                \App\Log::firstOrCreate([
-                'type'    => $opt,
-                'content' => $line.'.',
-                'version_id' => $vers->id,
-                'link'    => implode(',', $links),
-              ]);
+                $log = \App\Log::firstOrCreate([
+                  'type'    => $opt,
+                  'content' => $line.'.',
+                  'version_id' => $vers->id,
+                  'link'    => implode(',', $links),
+                ]);
+
+                if(!empty($authors)){
+                  $log->authors()->sync($authors);
+                }
             }
         }
 

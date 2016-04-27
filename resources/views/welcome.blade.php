@@ -41,14 +41,13 @@
 
           h1 {
             font-size: 86px;
-            margin-bottom: 0;
             font-weight: 400;
             margin: 0;
             cursor: pointer;
           }
 
           .pretitle {
-            margin: 5% 0 0;
+            margin: 15px 0 0;
             font-size: 24px;
           }
 
@@ -129,9 +128,11 @@
             background: rgba(255,255,255,.1);
             border-radius: 6px;
             color:#fff;
+            width: 320px;
+            margin: 0 auto;
           }
 
-          .social a:not(:first-child):not(:last-child) {
+          .social a{
             padding: 0 14px;
           }
 
@@ -193,6 +194,79 @@
             text-decoration: none;
           }
 
+          img{
+             width: 32px;
+             height:32px
+          }
+
+          .log ul > li div:first-of-type{
+            width: 80%;
+            float:left;
+          }
+
+          .log ul > li div:last-of-type{
+            width: 18%;
+            float:right;
+            text-align:right;
+          }
+
+
+          .clearfix:after {
+               visibility: hidden;
+               display: block;
+               font-size: 0;
+               content: " ";
+               clear: both;
+               height: 0;
+               }
+          .clearfix { display: inline-block; }
+
+          * html .clearfix { height: 1%; }
+          .clearfix { display: block; }
+
+          .authors{
+            padding-top: 10px;
+            overflow: hidden;
+            overflow-x:scroll;
+            height: 60px;
+            white-space:nowrap;
+            text-align:center;
+          }
+
+          h1 img{
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-top:-10px;
+          }
+          .featured{
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(255,255,255,.9);
+            color: #000;
+            padding: 10px 20px 10px 20px;
+            border-radius: 6px;
+            text-align: center;
+          }
+
+          .featured:hover{
+            text-decoration: none;
+          }
+
+          .featured img{
+            border-radius: 50%;
+            height: 60px;
+            width: 60px;
+            float: left;
+            margin-right: 20px;
+
+          }
+
+          .featured strong{
+            font-size: 16px;
+            line-height: 28px;
+          }
           @media only screen and (max-width: 480px) {
             .log {
                 top: 140px;
@@ -225,6 +299,12 @@
               border-radius: 6px;
             }
           }
+          @media only screen and (max-width: 780px) {
+            .featured{
+              display:none
+            }
+          }
+
         </style>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -237,12 +317,30 @@
         </script>
     </head>
     <body>
+      @if(!empty($featured))
+        <a href="{{ url($featured->name) }}" class="featured">
+          <img src="{{ $featured->avatar }}" title="{{ $featured->name }}">
+            <strong>#1 Contributor</strong><br>
+            {{ '@'.$featured->name }}
+        </a>
+      @endif
+
+
         <div class="container">
             <div class="content">
-                <p class="pretitle">Laravel</p>
+                <p class="pretitle">Laravel
+                  @if($author) Author
+                  @endif
+                </p>
 
-                <div class="dropdown">
-                  <h1 class="title">v{{ $version }}</h1>
+                <div class=" @if(!$author) dropdown @endif ">
+                  <h1 class="title">
+                    @if($author)
+                       {{ '@'.$author->name}} <img src="{{ $author->avatar }}" title="{{ $author->name }}">
+                    @else
+                      v{{ $version }}
+                    @endif
+                  </h1>
                   <div class="dropdown-content">
                     <ul>
                       @foreach ($versions as $row)
@@ -252,16 +350,28 @@
                   </div>
                 </div>
 
-                <div class="date">Released <strong>{{ $date }}</strong> with <strong>{{ $totals }}</strong> changes.</div>
+                <div class="date">
+                  @if($author)
+                     Has released a total of <strong>{{ $author->logs->count() }}</strong> changes, the last one was <strong>{{ $author->logs->first()->created_at->diffForHumans() }}</strong>.
+                  @else
+                    Released <strong>{{ $date }}</strong> with <strong>{{ $totals }}</strong> changes.
+                  @endif
+                </div>
 
                 <p></p>
 
                 <div class="social">
-                  <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
-                  <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
-                  <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-github"></em></a>
-                  <a href="{{ url($version .'.rss') }}" target="_social"><em class="fa fa-rss"></em></a>
-                  <a href="{{ url($version .'.json') }}" target="_social"><em class="fa fa-code"></em></a>
+                  @if($author)
+                  <a href="{{ $author->url }}" target="_social"><em class="fa fa-github"></em></a>
+                  <a href="https://twitter.com/{{ $author->name }}" target="_social"><em class="fa fa-twitter"></em></a>
+                  @else
+                    <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
+                    <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
+                    <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-github"></em></a>
+                    <a href="{{ url($version .'.rss') }}" target="_social"><em class="fa fa-rss"></em></a>
+                    <a href="{{ url($version .'.json') }}" target="_social"><em class="fa fa-code"></em></a>
+                  @endif
+
                 </div>
 
                 <div class="spam">
@@ -269,7 +379,17 @@
                 </div>
 
                 <div class="log">
+
+                  @if(!$author)
+                    <div class="authors">
+                        @foreach ($authors as $author)
+                            <a href="{{ url($author->name) }}"><img src="{{ $author->avatar }}" title="{{ $author->name }}"></em></a>
+                        @endforeach
+                    </div>
+                  @endif
+
                   <div class="details">
+
                     <form method="get">
                       <input type="search" name="q" placeholder="Search" value="{{ $q }}">
                     </form>
@@ -280,13 +400,21 @@
                         </div>
                         <ul>
                           @foreach ($result as $row)
-                            <li>
-                              <p>
+                            <li class="clearfix">
+                              <div>
                                 @foreach($row->links() as $link)
                                   <a href="{{ $link }}" target="_github"><em class="fa fa-external-link"></em></a>
                                 @endforeach
                                 {{ $row->content }}
-                              </p>
+                              </div>
+                              <div>
+                                @if(!$author)
+                                  @foreach($row->authors as $author)
+                                    <a href="{{ $author->url }}" target="_github"><img src="{{ $author->avatar }}" title="{{ $author->name }}"></em></a>
+                                  @endforeach
+                                @endif
+
+                              </div>
                             </li>
                           @endforeach
                         </ul>

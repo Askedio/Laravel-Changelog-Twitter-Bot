@@ -36,4 +36,9 @@ class Log extends Model
       return $this->belongsTo('App\Version');
     }
 
+    public function authors()
+    {
+      return $this->belongsToMany('App\Author');
+    }
+
 }

@@ -19,20 +19,6 @@ class HomeController extends Controller
 
     private function getRecords($version = 'latest')
     {
-        $results = [];
-
-        $log = $this->log->distinct('version');
-
-        $version = $version != 'latest'
-            ? \App\Version::where('number', '=', $version)->firstOrFail()
-            : \App\Version::orderBy('number', 'desc')->first();
-
-        $rows = $version->logs();
-
-        if (request()->has('q')) {
-            $rows->where('content', 'LIKE', '%'.request()->input('q').'%');
-        }
-
         $results = [
           'Added'   => [],
           'Changed' => [],
@@ -40,29 +26,59 @@ class HomeController extends Controller
           'Removed' => [],
         ];
 
-        $rows = $rows->get();
+        $author = false;
 
-        foreach ($rows as $row) {
+        $authors = [];
+
+        if ($version !='latest' && !preg_match('/^(\d+\.)?(\d+\.)?(\*|\d+)$/s', $version)) {
+            $author = \App\Author::where('name', $version)->with('logs')->firstOrFail();
+            $version = 'latest';
+        }
+
+        $version = $version != 'latest'
+            ? \App\Version::where('number', '=', $version)->firstOrFail()
+            : \App\Version::orderBy('number', 'desc')->first();
+
+        $rows = $author
+                ? $author->logs()
+                : $version->logs()->with('authors');
+
+        if (request()->has('q')) {
+            $rows->where('content', 'LIKE', '%'.request()->input('q').'%');
+        }
+
+        foreach ($rows->get() as $row) {
             $results[$row->type][] = $row;
+            if(!empty($row->authors[0])){
+              $authors[$row->authors[0]->name] = $row->authors[0];
+            }
         }
 
         return [
+          'author'     => $author,
+          'authors'    => $authors,
           'version'    => $version->number,
           'date'       => $version->date,
           'totals'     => $rows->count(),
           'changes'    => array_filter($results),
-          'q'          => request()->input('q'),
+          'q'          => htmlentities(request()->input('q')),
         ];
     }
 
     public function versions()
     {
-        return \App\Version::limit(20)->get();
+        return \App\Version::orderBy('number', 'desc')->limit(20)->get();
     }
 
     public function index()
     {
-        return view('welcome')->with(array_merge($this->getRecords(), ['versions' => $this->versions()]));
+
+        $featured = \App\Author::with('logs')->get()->sortByDesc(function($row){
+            return $row->logs->count();
+        })->first();
+
+
+        return view('welcome')->with(array_merge($this->getRecords(), ['featured' => $featured, 'versions' => $this->versions()]));
     }
 
     public function show($version)
