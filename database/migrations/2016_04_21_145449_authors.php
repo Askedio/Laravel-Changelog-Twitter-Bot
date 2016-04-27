@@ -15,9 +15,9 @@ class Author extends Migration
          Schema::create('author_log', function (Blueprint $table) {
            $table->increments('id');
            $table->string('name');
-           $table->string('avatar')->nullable(;
-           $table->string('url')->nullable(;
-           $table->string('website')->nullable(;
+           $table->string('avatar')->nullable();
+           $table->string('url')->nullable();
+           $table->string('website')->nullable();
            $table->string('twitter')->nullable();
            $table->timestamps();
          });
