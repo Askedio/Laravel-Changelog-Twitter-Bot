@@ -12,7 +12,7 @@ class Author extends Migration
       */
      public function up()
      {
-         Schema::create('author_log', function (Blueprint $table) {
+         Schema::create('authors', function (Blueprint $table) {
            $table->increments('id');
            $table->string('name');
            $table->string('avatar')->nullable();
@@ -30,6 +30,6 @@ class Author extends Migration
       */
      public function down()
      {
-         Schema::drop('author_log');
+         Schema::drop('authors');
      }
 }
