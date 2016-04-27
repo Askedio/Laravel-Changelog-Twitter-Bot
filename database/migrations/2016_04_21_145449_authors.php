@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class Author extends Migration
+class Authors extends Migration
 {
     /**
       * Run the migrations.
@@ -12,7 +12,6 @@ class Author extends Migration
       */
      public function up()
      {
-       Schema::drop('authors');
         Schema::create('authors', function (Blueprint $table) {
            $table->increments('id');
            $table->string('name');
