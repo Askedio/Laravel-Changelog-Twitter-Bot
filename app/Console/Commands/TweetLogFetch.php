@@ -68,7 +68,7 @@ class TweetLogFetch extends Command
                 if(!$vers = \App\Version::where('number', $version[0])->first()){
                   $vers = \App\Version::create(['number' => $version[0], 'date' => $version[1]]);
                   if(env('APP_ENV') == 'production'){
-                      \Twitter::postTweet(['status' => '#laravel Changelog updated for version ' . $version[0] . ' ' . $version[1] . ' #changelog', 'format' => 'json']);
+                      \Twitter::postTweet(['status' => '#laravel Changelog updated for version ' . $version[0] . ' ' . $version[1] . ' #changelog https://cruddy.io/laravel-changelog/' . $version[0], 'format' => 'json']);
                   }
                 }
 

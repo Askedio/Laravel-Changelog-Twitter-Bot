@@ -37,14 +37,14 @@ class TweetLog extends Command
      */
     public function handle()
     {
-        $log = \App\Log::where('tweeted', '=', '0')->limit(1)->orderBy('id', 'DESC')->get();
+        $log = \App\Log::where('tweeted', '=', '0')->limit(10)->orderBy('id', 'DESC')->get();
         foreach ($log as $lg) {
             $lg->tweeted = 1;
             $lg->save();
 
             $link = $lg->links();
 
-            $base_post = $lg->version.' '.$lg->content;
+            $base_post = $lg->version->number.' '.$lg->content;
 
             $post = !empty($link[0])
               ? $base_post.' '.$link[0]
@@ -58,9 +58,13 @@ class TweetLog extends Command
                 $post .= ' #changelog';
             }
 
-            try {
-                \Twitter::postTweet(['status' => substr($post, 0, 140), 'format' => 'json']);
-            } catch (\Exception $exc) {
+            if(env('APP_ENV') == 'production'){
+                try {
+                    \Twitter::postTweet(['status' => substr($post, 0, 140), 'format' => 'json']);
+                } catch (\Exception $exc) {
+                }
+            } else {
+              dd(['status' => substr($post, 0, 140), 'format' => 'json']);
             }
         }
     }

@@ -10,6 +10,8 @@ class HomeController extends Controller
 {
     protected $log;
 
+    protected $version;
+
     public function __construct(Log $log)
     {
         $this->log = $log;
@@ -23,8 +25,7 @@ class HomeController extends Controller
 
         $version = $version != 'latest'
             ? \App\Version::where('number', '=', $version)->firstOrFail()
-            : \App\Version::first();
-
+            : \App\Version::orderBy('number', 'desc')->first();
 
         $rows = $version->logs();
 

@@ -38,6 +38,8 @@ class TweetReplies extends Command
     public function handle()
     {
         $mentions = \Twitter::getMentionsTimeline(['count' => 20, 'format' => 'json']);
+
+
         foreach (json_decode($mentions) as $comment) {
             if (\App\Comment::where('tweetid', $comment->id)->first()) {
                 continue;
@@ -48,27 +50,32 @@ class TweetReplies extends Command
                 'The meaning of life can be found while writing #laravel #php code.',
                 'I think if you keep coding with #laravel #php you\'ll find the answer.',
               ];
-              $this->tweet($comment->user->screen_name, $meanings[array_rand($meanings, 1)]);
+              $this->tweet($comment->user->screen_name, $meanings[array_rand($meanings, 1)], $comment->id);
             }
 
             if (preg_match('/latest version/s', $comment->text) || preg_match('/current version/s', $comment->text)) {
                 $version = \App\Version::first();
                 $post = 'The latest version of #laravel is: '.$version->number.' released '.$version->date;
-                $this->tweet($comment->user->screen_name, $post);
+                $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
 
             if (preg_match('/thank you/s', $comment->text)) {
+              die('a');
                 $post = 'Your\'re welcome.';
-                $this->tweet($comment->user->screen_name, $post);
+                $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
 
             \App\Comment::create(['tweetid' => $comment->id]);
         }
     }
 
-    private function tweet($user, $message){
+    private function tweet($user, $message, $reply_id){
       if(env('APP_ENV') == 'production'){
-        \Twitter::postTweet(['status' => substr('@'.$user. ' '. $message, 0, 140), 'format' => 'json']);
+        \Twitter::postTweet([
+          'status' => substr('@'.$user. ' '. $message, 0, 140),
+          'in_reply_to_status_id' => $reply_id,
+          'format' => 'json'
+        ]);
       }
     }
 }
