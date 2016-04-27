@@ -60,7 +60,6 @@ class TweetReplies extends Command
             }
 
             if (preg_match('/thank you/s', $comment->text)) {
-              die('a');
                 $post = 'Your\'re welcome.';
                 $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
