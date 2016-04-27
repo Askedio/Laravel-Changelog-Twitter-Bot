@@ -12,7 +12,8 @@ class AuthorLog extends Migration
       */
      public function up()
      {
-         Schema::create('author_log', function (Blueprint $table) {
+       Schema::drop('author_log');
+        Schema::create('author_log', function (Blueprint $table) {
            $table->integer('log_id');
            $table->integer('author_id');
          });
