@@ -78,7 +78,7 @@ class TweetReplies extends Command
 
               if($author){
                 if($author->update([
-                  'link' => $link,
+                  'website' => $link,
                 ])){
                   $post = 'You got it! I\'ve changed the link to ' . $link;
                 }

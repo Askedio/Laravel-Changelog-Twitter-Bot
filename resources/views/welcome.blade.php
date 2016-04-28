@@ -362,8 +362,11 @@
 
                 <div class="social">
                   @if($author)
-                  <a href="{{ $author->url }}" target="_social"><em class="fa fa-github"></em></a>
-                  <a href="https://twitter.com/{{ $author->twitter ?: $author->name }}" target="_social"><em class="fa fa-twitter"></em></a>
+                    @if($author->website)
+                      <a href="{{ $author->website }}" target="_social"><em class="fa fa-external-link"></em></a>
+                    @endif
+                    <a href="{{ $author->url }}" target="_social"><em class="fa fa-github"></em></a>
+                    <a href="https://twitter.com/{{ $author->twitter ?: $author->name }}" target="_social"><em class="fa fa-twitter"></em></a>
                   @else
                     <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
                     <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
