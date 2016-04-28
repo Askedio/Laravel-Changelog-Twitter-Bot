@@ -1,4 +1,5 @@
 @extends('template')
+@section('title', 'Contributors')
 @section('content')
   <style>
     .contributors{
@@ -13,6 +14,7 @@
       width: 150px;
       float: left;
       margin-right: 20px;
+      border: 1px solid rgba(255,255,255,.2)
     }
     .contributors .clearfix{
       margin: 20px;
@@ -31,7 +33,8 @@
     }
 
     h1{font-size: 48px}
-    h2{font-size: 36px}
+    h2{font-size:16px;margin:0}
+    h3{font-size: 36px}
     .container{margin-top: 40px;}
     body{ overflow: auto}
 
@@ -54,8 +57,9 @@
   </style>
   <div class="container">
 
-  <h1>Laravel Contributors</h1>
-  <p>These fine people keep Laravel going with their contributions.</p>
+  <a href="{{ url('/') }}"><h1>Laravel Contributors</h1></a>
+  <h2>These fine people keep Laravel going with their contributions.</h2>
+  <p class="spam">Contributions calculated for the past month (starting {{ \Carbon\Carbon::today()->subMonth()->toDateString() }})</p>
 
   <div class="contributors">
     @foreach($users as $user)
@@ -63,8 +67,8 @@
 
     <a href="{{ url($user->name) }}"><img src="{{ $user->avatar }}" title="{{ $user->name }}"></a>
 
-      <h2>{{ '@'.$user->name }}</h2>
-      <h4>{{ $user->logs->count()}} Contributions</h4>
+      <h3>{{ '@'.$user->name }}</h3>
+      <h4>{{ $user->logs->count()}} {{ trans_choice('app.contributions', $user->logs->count()) }}</h4>
       <p>
     @if($user->website)
       <a href="{{ $user->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>

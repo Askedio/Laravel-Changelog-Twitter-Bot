@@ -261,9 +261,12 @@
   .featured a{
     color: #000;
   }
+
+
   .featured p{
     padding-top: 4px;
   }
+
 
   @media only screen and (max-width: 480px) {
     .log {

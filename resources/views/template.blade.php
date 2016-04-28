@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Laravel
+          @yield('title')
           @if(isset($version))
             {{ $version }} Changelog from {{ $date }}
           @endif

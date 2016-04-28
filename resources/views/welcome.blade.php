@@ -3,7 +3,7 @@
   @if(!empty($featured))
     <div class="featured">
         <a href="{{ url($featured->name) }}"><img src="{{ $featured->avatar }}" title="{{ $featured->name }}"></a>
-        <strong>#1 Contributor</strong><br>
+        <strong>Contributor Of The Month</strong><br>
         {{ '@'.$featured->name }}
 
         <p>
