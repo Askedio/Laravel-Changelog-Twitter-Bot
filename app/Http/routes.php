@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('/contributors', 'AuthorController@index');
 Route::get('/{id}.json', 'HomeController@getJson');
 Route::get('{id}.rss', 'HomeController@getRss');
 Route::get('/{version}/', 'HomeController@show');
