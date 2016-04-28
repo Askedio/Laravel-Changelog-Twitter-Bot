@@ -53,13 +53,14 @@
       }
 
     }
+    .spam{font-size: 11px}
 
   </style>
   <div class="container">
 
   <a href="{{ url('/') }}"><h1>Laravel Contributors</h1></a>
   <h2>These fine people keep Laravel going with their contributions.</h2>
-  <p class="spam">Contributions calculated for the past month (starting {{ \Carbon\Carbon::today()->subMonth()->toDateString() }})</p>
+  <p class="spam">Contributions calculated based on entries to the <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_github"><strong>CHANGELOG</strong></a> over the past month.</p>
 
   <div class="contributors">
     @foreach($users as $user)
