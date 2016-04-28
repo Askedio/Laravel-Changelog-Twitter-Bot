@@ -6,12 +6,15 @@
         <strong>#1 Contributor</strong><br>
         {{ '@'.$featured->name }}
 
-        <p>@if($featured->website)
-          <a href="{{ $featured->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
-        @endif
-        <a href="{{ $featured->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
-        <a href="https://twitter.com/{{ $featured->twitter ?: $featured->name }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a></p>
-
+        <p>
+          @if($featured->website)
+            <a href="{{ $featured->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
+          @endif
+          <a href="{{ $featured->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
+          @if($featured->website)
+            <a href="https://twitter.com/{{ $featured->twitter }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
+          @endif
+        </p>
     </div>
   @endif
 
@@ -57,7 +60,9 @@
                 <a href="{{ $author->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
               @endif
               <a href="{{ $author->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
-              <a href="https://twitter.com/{{ $author->twitter ?: $author->name }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
+              @if($author->twitter)
+                <a href="https://twitter.com/{{ $author->twitter }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
+              @endif
             @else
               <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
               <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-fw fa-twitter"></em></a>

@@ -70,7 +70,9 @@
       <a href="{{ $user->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
     @endif
     <a href="{{ $user->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
-    <a href="https://twitter.com/{{ $user->twitter ?: $user->name }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
+    @if($user->twitter)
+      <a href="https://twitter.com/{{ $user->twitter }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
+    @endif
   </p>
 
     </div>

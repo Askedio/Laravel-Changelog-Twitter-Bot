@@ -56,7 +56,7 @@ class TweetReplies extends Command
                 $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
 
-            if (preg_match('/update link/s', $comment->text) || preg_match('/my link is/s', $comment->text)) {
+            if (preg_match('/update link/s', $comment->text) || preg_match('/link is/s', $comment->text)) {
               $post = 'Sorry, I was not able to complete your request.';
 
               preg_match_all('/@(\w{1,15})\b/s', $comment->text, $matches);
@@ -80,7 +80,7 @@ class TweetReplies extends Command
               $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
 
-            if (preg_match('/is really/s', $comment->text)) {
+            if (preg_match('/is really/s', $comment->text) preg_match('/twitter account is/s', $comment->text)) {
                 $post = 'Sorry, I was not able to complete your request.';
                 preg_match_all('/@(\w{1,15})\b/s', $comment->text, $matches);
                 if(count($matches[1]) == 3 && $comment->user->screen_name = 'asked_io'){
