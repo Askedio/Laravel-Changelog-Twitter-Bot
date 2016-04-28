@@ -45,16 +45,8 @@ class TweetReplies extends Command
                 continue;
             }
 
-            if (preg_match('/meaning of life/s', $comment->text)) {
-              $meanings = [
-                'The meaning of life can be found while writing #laravel #php code.',
-                'I think if you keep coding with #laravel #php you\'ll find the answer.',
-              ];
-              $this->tweet($comment->user->screen_name, $meanings[array_rand($meanings, 1)], $comment->id);
-            }
-
             if (preg_match('/latest version/s', $comment->text) || preg_match('/current version/s', $comment->text)) {
-                $version = \App\Version::first();
+                $version = \App\Version::orderBy('number', 'desc')->first();
                 $post = 'The latest version of #laravel is: '.$version->number.' released '.$version->date;
                 $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
@@ -85,9 +77,7 @@ class TweetReplies extends Command
 
               }
 
-
               $this->tweet($comment->user->screen_name, $post, $comment->id);
-
             }
 
             if (preg_match('/is really/s', $comment->text)) {
