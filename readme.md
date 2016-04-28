@@ -7,4 +7,5 @@ Not intended to be great code, a few hours of work - that I must stop to get bac
 * 'latest version'
 * 'thank you'
 * 'update link' or 'link is'
-* 'is really' or 'twitter account is'
+* 'is really' or 'twitter account is
+* 'is on twitter'

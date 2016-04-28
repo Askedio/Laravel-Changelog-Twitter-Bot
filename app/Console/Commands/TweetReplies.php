@@ -80,6 +80,27 @@ class TweetReplies extends Command
               $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
 
+            if (preg_match('/is on twitter/s', $comment->text)) {
+                $post = 'Sorry, I was not able to complete your request.';
+                preg_match_all('/@(\w{1,15})\b/s', $comment->text, $matches);
+                if(count($matches[1]) == 2 && $comment->user->screen_name = 'asked_io'){
+                  $author = \App\Author::where('name', $matches[1][1])->first();
+
+                  if($author){
+                    if($author->update([
+                      'twitter' => $matches[1][2],
+                    ])){
+                      $post = 'Nice! I\'ve linked that account.';
+                    }
+
+                  }
+                }
+
+                $this->tweet($comment->user->screen_name, $post, $comment->id);
+
+            }
+
+
             if (preg_match('/is really/s', $comment->text) || preg_match('/twitter account is/s', $comment->text)) {
                 $post = 'Sorry, I was not able to complete your request.';
                 preg_match_all('/@(\w{1,15})\b/s', $comment->text, $matches);
