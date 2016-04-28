@@ -64,17 +64,65 @@ class TweetReplies extends Command
                 $this->tweet($comment->user->screen_name, $post, $comment->id);
             }
 
+            if (preg_match('/update link/s', $comment->text) || preg_match('/my link is/s', $comment->text)) {
+              $post = 'Sorry, I was not able to complete your request.';
+
+              preg_match_all('/@(\w{1,15})\b/s', $comment->text, $matches);
+              $link= $comment->entities->urls[0]->expanded_url;
+
+              if(!empty($matches) && $comment->user->screen_name = 'asked_io'){
+                $author = \App\Author::where('name', $matches[1][1])->first();
+              } else {
+                $author = \App\Author::where('name', $comment->user->screen_name)->first();
+              }
+
+              if($author){
+                if($author->update([
+                  'link' => $link,
+                ])){
+                  $post = 'You got it! I\'ve changed the link to ' . $link;
+                }
+
+              }
+
+
+              $this->tweet($comment->user->screen_name, $post, $comment->id);
+
+            }
+
+            if (preg_match('/is really/s', $comment->text)) {
+                $post = 'Sorry, I was not able to complete your request.';
+                preg_match_all('/@(\w{1,15})\b/s', $comment->text, $matches);
+                if(count($matches[1]) == 3 && $comment->user->screen_name = 'asked_io'){
+                  $author = \App\Author::where('name', $matches[1][1])->first();
+
+                  if($author){
+                    if($author->update([
+                      'twitter' => $matches[1][2],
+                    ])){
+                      $post = 'Thanks pal! I\'ve changed '. $matches[1][1] .' to '. $matches[1][2];
+                    }
+
+                  }
+                }
+
+                $this->tweet($comment->user->screen_name, $post, $comment->id);
+
+            }
+
+
             \App\Comment::create(['tweetid' => $comment->id]);
         }
     }
 
     private function tweet($user, $message, $reply_id){
+      $post = substr('@'.$user. ' '. $message, 0, 140);
       if(env('APP_ENV') == 'production'){
         \Twitter::postTweet([
-          'status' => substr('@'.$user. ' '. $message, 0, 140),
+          'status' => $post,
           'in_reply_to_status_id' => $reply_id,
           'format' => 'json'
         ]);
-      }
+      } else echo $post.PHP_EOL;
     }
 }
