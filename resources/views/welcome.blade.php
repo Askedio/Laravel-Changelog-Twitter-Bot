@@ -128,7 +128,7 @@
             background: rgba(255,255,255,.1);
             border-radius: 6px;
             color:#fff;
-            width: 320px;
+            width: 360px;
             margin: 0 auto;
           }
 
@@ -256,8 +256,8 @@
 
           .featured img{
             border-radius: 50%;
-            height: 60px;
-            width: 60px;
+            height: 74px;
+            width: 74px;
             float: left;
             margin-right: 20px;
 
@@ -267,6 +267,14 @@
             font-size: 16px;
             line-height: 28px;
           }
+
+          .featured a{
+            color: #000;
+          }
+          .featured p{
+            padding-top: 4px;
+          }
+
           @media only screen and (max-width: 480px) {
             .log {
                 top: 140px;
@@ -318,11 +326,18 @@
     </head>
     <body>
       @if(!empty($featured))
-        <a href="{{ url($featured->name) }}" class="featured">
-          <img src="{{ $featured->avatar }}" title="{{ $featured->name }}">
+        <div class="featured">
+            <a href="{{ url($featured->name) }}"><img src="{{ $featured->avatar }}" title="{{ $featured->name }}"></a>
             <strong>#1 Contributor</strong><br>
             {{ '@'.$featured->name }}
-        </a>
+
+            <p>@if($featured->website)
+              <a href="{{ $featured->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
+            @endif
+            <a href="{{ $featured->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
+            <a href="https://twitter.com/{{ $featured->twitter ?: $featured->name }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a></p>
+
+        </div>
       @endif
 
 
@@ -352,7 +367,7 @@
 
                 <div class="date">
                   @if($author)
-                     Has released a total of <strong>{{ $author->logs->count() }}</strong> changes, the last one was <strong>{{ $author->logs->first()->created_at->diffForHumans() }}</strong>.
+                     I've released a total of <strong>{{ $author->logs->count() }}</strong> changes, the last one was <strong>{{ $author->logs->first()->created_at->diffForHumans() }}</strong>.
                   @else
                     Released <strong>{{ $date }}</strong> with <strong>{{ $totals }}</strong> changes.
                   @endif
@@ -362,17 +377,18 @@
 
                 <div class="social">
                   @if($author)
+                      <a href="{{ url('/') }}"><em class="fa fa-fw fa-home"></em></a>
                     @if($author->website)
-                      <a href="{{ $author->website }}" target="_social"><em class="fa fa-external-link"></em></a>
+                      <a href="{{ $author->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
                     @endif
-                    <a href="{{ $author->url }}" target="_social"><em class="fa fa-github"></em></a>
-                    <a href="https://twitter.com/{{ $author->twitter ?: $author->name }}" target="_social"><em class="fa fa-twitter"></em></a>
+                    <a href="{{ $author->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
+                    <a href="https://twitter.com/{{ $author->twitter ?: $author->name }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
                   @else
                     <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
-                    <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-twitter"></em></a>
-                    <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-github"></em></a>
-                    <a href="{{ url($version .'.rss') }}" target="_social"><em class="fa fa-rss"></em></a>
-                    <a href="{{ url($version .'.json') }}" target="_social"><em class="fa fa-code"></em></a>
+                    <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
+                    <a href="https://github.com/Askedio/Laravel-Changelog-Twitter-Bot" target="_social"><em class="fa fa-fw fa-github"></em></a>
+                    <a href="{{ url($version .'.rss') }}" target="_social"><em class="fa fa-fw fa-rss"></em></a>
+                    <a href="{{ url($version .'.json') }}" target="_social"><em class="fa fa-fw fa-code"></em></a>
                   @endif
 
                 </div>
