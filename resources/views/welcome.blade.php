@@ -107,12 +107,9 @@
                           {{ $row->content }}
                         </div>
                         <div>
-                          @if(!$author)
-                            @foreach($row->authors as $author)
-                              <a href="{{ $author->url }}" target="_github"><img src="{{ $author->avatar }}" title="{{ $author->name }}"></em></a>
-                            @endforeach
-                          @endif
-
+                          @foreach($row->authors as $author)
+                            <a href="{{ $author->url }}" target="_github"><img src="{{ $author->avatar }}" title="{{ $author->name }}"></em></a>
+                          @endforeach
                         </div>
                       </li>
                     @endforeach
