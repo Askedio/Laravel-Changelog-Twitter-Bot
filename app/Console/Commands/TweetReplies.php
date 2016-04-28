@@ -88,7 +88,7 @@ class TweetReplies extends Command
 
                   if($author){
                     if($author->update([
-                      'twitter' => $matches[1][2],
+                      'twitter' => $matches[1][1],
                     ])){
                       $post = 'Nice! I\'ve linked that account.';
                     }
