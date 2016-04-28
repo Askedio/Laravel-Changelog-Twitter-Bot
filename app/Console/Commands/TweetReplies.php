@@ -63,9 +63,9 @@ class TweetReplies extends Command
               $link= $comment->entities->urls[0]->expanded_url;
 
               if(!empty($matches) && $comment->user->screen_name = 'asked_io'){
-                $author = \App\Author::where('name', $matches[1][1])->first();
+                $author = \App\Author::where('name', $matches[1][1])->orWhere('twitter', $matches[1][1])->first();
               } else {
-                $author = \App\Author::where('name', $comment->user->screen_name)->first();
+                $author = \App\Author::where('name', $comment->user->screen_name)->orWhere('twitter', $matches[1][1])->first();
               }
 
               if($author){
