@@ -67,7 +67,7 @@ class HomeController extends Controller
 
     public function versions()
     {
-        return \App\Version::orderBy('number', 'desc')->limit(20)->get();
+        return \App\Version::orderBy('id', 'desc')->limit(20)->get();
     }
 
     public function index()
