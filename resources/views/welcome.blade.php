@@ -26,7 +26,7 @@
 
           <div class="date">
             @if($author)
-               I've released a total of <strong>{{ $author->logs->count() }}</strong> changes, the last one was <strong>{{ $author->logs->first()->created_at->diffForHumans() }}</strong>.
+               I've released a total of <strong>{{ $author->logs->count() }}</strong> changes, the last one was <strong>{{ $author->logs()->orderBy('id','desc')->first()->created_at->diffForHumans() }}</strong>.
             @else
               Released <strong>{{ $date }}</strong> with <strong>{{ $totals }}</strong> changes.
             @endif
