@@ -37,7 +37,7 @@ class HomeController extends Controller
 
         $version = $version != 'latest'
             ? \App\Version::where('number', '=', $version)->firstOrFail()
-            : \App\Version::orderBy('number', 'desc')->first();
+            : \App\Version::orderBy('id', 'desc')->first();
 
         $rows = $author
                 ? $author->logs()
