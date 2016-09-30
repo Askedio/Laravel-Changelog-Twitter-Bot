@@ -37,7 +37,7 @@ class HomeController extends Controller
 
         $version = $version != 'latest'
             ? \App\Version::where('number', '=', $version)->firstOrFail()
-            : \App\Version::orderBy('id', 'desc')->first();
+            : \App\Version::orderBy(\DB::raw('INET_ATON(number)'), 'desc')->first();
 
         $rows = $author
                 ? $author->logs()
@@ -67,7 +67,7 @@ class HomeController extends Controller
 
     public function versions()
     {
-        return \App\Version::orderBy('id', 'desc')->limit(20)->get();
+        return \App\Version::orderBy(\DB::raw('INET_ATON(number)'), 'desc')->limit(20)->get();
     }
 
     public function index()
