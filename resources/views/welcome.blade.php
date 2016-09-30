@@ -1,24 +1,5 @@
 @extends('template')
 @section('content')
-  @if(!empty($featured))
-    <div class="featured">
-        <a href="{{ url($featured->name) }}"><img src="{{ $featured->avatar }}" title="{{ $featured->name }}"></a>
-        <strong>Contributor Of The Month</strong><br>
-        {{ '@'.$featured->name }}
-
-        <p>
-          @if($featured->website)
-            <a href="{{ $featured->website }}" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
-          @endif
-          <a href="{{ $featured->url }}" target="_social"><em class="fa fa-fw fa-github"></em></a>
-          @if($featured->website)
-            <a href="https://twitter.com/{{ $featured->twitter }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
-          @endif
-        </p>
-    </div>
-  @endif
-
-
   <div class="container">
       <div class="content">
           <p class="pretitle">Laravel
@@ -64,7 +45,7 @@
                 <a href="https://twitter.com/{{ $author->twitter }}" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
               @endif
             @else
-              <a href="https://github.com/laravel/framework/blob/5.2/CHANGELOG.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
+              <a href="https://github.com/laravel/framework/blob/5.3/CHANGELOG-5.3.md" target="_social"><em class="fa fa-fw fa-external-link"></em></a>
               <a href="https://twitter.com/laravellog" target="_social"><em class="fa fa-fw fa-twitter"></em></a>
               <a href="{{ url('contributors') }}"><em class="fa fa-fw fa-users"></em></a>
               <a href="{{ url($version .'.rss') }}" target="_social"><em class="fa fa-fw fa-rss"></em></a>
