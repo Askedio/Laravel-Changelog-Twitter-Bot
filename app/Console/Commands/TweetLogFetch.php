@@ -50,7 +50,7 @@ class TweetLogFetch extends Command
           }
         }, GitHub::repo()->tags('laravel', 'framework'));
 
-        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG.md');
+        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG-5.3.md');
         $contents = explode(PHP_EOL, base64_decode($read['content']));
 
         array_shift($contents);
