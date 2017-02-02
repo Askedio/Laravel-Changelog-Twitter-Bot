@@ -50,7 +50,7 @@ class TweetLogFetch extends Command
           }
         }, GitHub::repo()->tags('laravel', 'framework'));
 
-        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG-5.3.md');
+        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG-5.4.md');
         $contents = explode(PHP_EOL, base64_decode($read['content']));
 
         array_shift($contents);
@@ -58,6 +58,7 @@ class TweetLogFetch extends Command
 
         $version = [];
         $opt = false;
+        $skipVersion = false;
 
         /*
          * Regexp makes more sense but ya, to lazy - and I'm not regexp pro.
@@ -65,6 +66,13 @@ class TweetLogFetch extends Command
         foreach ($contents as $content) {
             if (substr($content, 0, 3) == '## ') {
                 $version = array_map('trim', explode(' ', str_replace(['## v', '(', ')'], '', $content)));
+                if ($version[1] == '[Unreleased]') {
+                    $skipVersion = true;
+                    continue;
+                }
+
+                $skipVersion = false;
+
                 if(!$vers = \App\Version::where('number', $version[0])->first()){
                   $vers = \App\Version::create(['number' => $version[0], 'date' => $version[1]]);
                   if(env('APP_ENV') == 'production'){
@@ -72,6 +80,9 @@ class TweetLogFetch extends Command
                   }
                 }
 
+            } elseif($skipVersion) {
+              echo 'skip' . $version[1];
+                continue;
             } elseif (substr($content, 0, 4) == '### ') {
                 $opt = str_replace('### ', '', trim($content));
             } elseif (!empty($version) && !empty($opt)) {
