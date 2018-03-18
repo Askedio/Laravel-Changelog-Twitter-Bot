@@ -50,7 +50,7 @@ class TweetLogFetch extends Command
           }
         }, GitHub::repo()->tags('laravel', 'framework'));
 
-        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG-5.4.md');
+        $read = GitHub::repo()->contents()->show('laravel', 'framework', 'CHANGELOG-5.6.md');
         $contents = explode(PHP_EOL, base64_decode($read['content']));
 
         array_shift($contents);
@@ -76,7 +76,7 @@ class TweetLogFetch extends Command
                 if(!$vers = \App\Version::where('number', $version[0])->first()){
                   $vers = \App\Version::create(['number' => $version[0], 'date' => $version[1]]);
                   if(env('APP_ENV') == 'production'){
-                      \Twitter::postTweet(['status' => '#laravel Changelog updated for version ' . $version[0] . ' ' . $version[1] . ' #changelog https://cruddy.io/laravel-changelog/' . $version[0], 'format' => 'json']);
+                      \Twitter::postTweet(['status' => '#laravel Changelog updated for version ' . $version[0] . ' ' . $version[1] . ' #changelog https://laravel-log.asked.io/' . $version[0], 'format' => 'json']);
                   }
                 }
 
